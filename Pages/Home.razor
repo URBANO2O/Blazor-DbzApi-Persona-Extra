@@ -1,0 +1,45 @@
+﻿@page "/"
+@using BlazorDbzApiPersonaExtra.Models
+@inject HttpClient Http
+
+<h1>Consulta API DragonBall</h1>
+
+<label>PERSONAGEM:</label>
+
+<input type="number" @bind="characterId" />
+
+<br />
+<br />
+
+<button @onclick="BuscarPersonagem">
+    Consultar
+</button>
+
+<hr />
+
+@if (personagem != null)
+{
+    <h3>Informações do Personagem</h3>
+
+    <img src="@personagem.Image" width="300" />
+
+    <h2>@personagem.Name</h2>
+
+    <p>
+        <strong>Raça:</strong> @personagem.Race
+    </p>
+}
+
+@code {
+
+    int characterId;
+
+    Character personagem;
+
+    async Task BuscarPersonagem()
+    {
+        personagem = await Http.GetFromJsonAsync<Character>(
+            $"https://dragonball-api.com/api/characters/{characterId}"
+        );
+    }
+}
